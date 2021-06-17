@@ -73,7 +73,7 @@ def test_instance():
 
     # boosting.compute_c_indexes_for_test_dataset()
     # boosting.compute_clusters_consistency_for_test_labels()
-"""
+    """
     boosting.load_new_test_dataset(
         {'METH': 'meth_dummy.tsv'}, # OMIC file of the second test set.
         'dummy_METH', # Name of the second test test
@@ -81,7 +81,7 @@ def test_instance():
     )
 
     boosting.predict_labels_on_test_dataset()
-"""
+    """
     ray.shutdown()
 
 if __name__ == '__main__':
