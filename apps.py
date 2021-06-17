@@ -16,7 +16,7 @@ from time import sleep
 
 from flask import send_from_directory
 
-
+import step2
 # """
 # /
 #   /action
@@ -104,7 +104,15 @@ def predicted(cancer):
 
 @app.route("/<cancer>", methods=['GET', 'POST'])
 def cancer_func(cancer):
-    """ """
+    if request.method == 'POST':
+        OMIC_file = request.form['OMIC']
+        test_name = request.form['test_name']
+        survival_file = request.form['survival_file']
+        step2.test_instance(OMIC_file, test_name, survival_file)
+        
+        
+        
+        
     if MAIN_APPS.to_reload and MAIN_APPS.reloading:
         MAIN_APPS.to_reload = []
         MAIN_APPS.reloading = False

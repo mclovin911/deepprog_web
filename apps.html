@@ -145,67 +145,14 @@
       <br>
       <br>
   <h2><center><b>Drop your own sample!</b></center></h2>
-  <form action="/action/{{ deepprog.key }}" method="POST">
-
-    {# <h3>debug</h3> #}
-    {# <input type="radio" name="debug" value="True" checked> True<br> #}
-    {# <input type="radio" name="debug" value="False"> False<br> #}
-
-    <h3>Samples name:</h3>
-    <input list="data name" name="data name">
-    <br>
-        <datalist id="data name">
-      {% for data_name in deepprog.default_test_set %}
-        <option value={{ data_name }}>
-      {% endfor %}
-    </datalist>
-    <br><br>
-    <h3>Number of OMICS :  <input list="number of omics"
-                                 id="omic form"
-                                 value="1"
-                                  style="width:40px"
-                                  type="int"
-                                  name="Number of OMICS"> </h3>
-                                 <br>
-
-                                 <p id="omic"> </p>
-
-                                 <button type="button"
-                                         class="btn btn-sm btn-success"
-                                         onclick="test(document.getElementById('omic form').value)">
-                                         Add</button>
-    <script>
-      function test(a) {
-      var text = "";
-      for (i=0; i < a; i++) {
-      text += "<h3> Input data type nb " + (i + 1)  + " <\h3> \
-      <input list=\"data type\" name=\"data type\" id=\"datatype_" + i + "\" value=\"RNA\"                                   style=\"width:100px\"> \
-       <datalist id=\"data type\"> \
-      <option value=\"RNA\"> \
-      <option value=\"CNV\"> \
-      <option value=\"MIR\"> \
-      <option value=\"METH\"> \
-    </datalist>"
-       ;
-       text += "&#9658; <input display=\"inline\" type=\"file\" id=\"input_file_" + i + "\"></input><br><br>";
-
-      }
-      document.getElementById('omic').innerHTML = text;
-      }
-    </script>
-
-    <h3>survival file: </h3>
-    <input list="survival files" name="survival files"><br>
-    <datalist id="survival files">
-      {% for test_dataset in deepprog.survival_tsvs %}
-        <option value={{ deepprog.survival_tsvs[test_dataset] }}>
-      {% endfor %}
-    </datalist>
-    <br>
-    <input class="btn btn-lg btn-success"
-           value="Submit TEST"
-           type="submit"
-           role="button">
+  <form method="POST">
+  	<label for='OMIC'> OMIC file: </label>
+  	<input type='file' id='OMIC' name='OMIC'> <br><br>
+  	<label for='test_name'> Test Name: </label>
+  	<input type='text' id='test_name' name='test_name'> <br><br>
+  	<label for='survival_file'> Survival file: </label>
+  	<input type='file' id='survival_file' name='survival_file'> <br><br>
+    <input class="btn btn-lg btn-success" value="Submit TEST" type="submit" role="button">
   </form>
     </section>
   </div>

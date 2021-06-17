@@ -5,15 +5,14 @@ from os.path import isdir
 from simdeep.simdeep_boosting import SimDeepBoosting
 
 
-def test_instance():
+def test_instance(Omic, test_name, survival_file):
     """
     example of SimDeepBoosting starting from precomputed labels
     To obtain precomputed label files that can be used as an example, please run
     the `example_with_dummy_data.py` example script
     """
 
-    PATH_PRECOMPUTED_LABELS = '{0}/../examples/data/Step1/saved_models_classes'.format(
-        split(abspath(__file__))[0])
+    PATH_PRECOMPUTED_LABELS = '~/code/DeepProg/examples/data/Step1/saved_models_classes'
 
     if not isdir(PATH_PRECOMPUTED_LABELS):
         print('No folder: {0} found' \
@@ -21,7 +20,7 @@ def test_instance():
                   PATH_PRECOMPUTED_LABELS, split(abspath(__file__))[0]))
         return
 
-    PATH_DATA = '{0}/../examples/data/'.format(split(abspath(__file__))[0])
+    PATH_DATA = '~/code/DeepProg/examples/data/'
 
     #Input file
     TRAINING_TSV = {'RNA': 'rna_dummy.tsv', 'METH': 'meth_dummy.tsv'}
@@ -64,9 +63,9 @@ def test_instance():
     boosting.compute_pvalue_for_merged_test_fold()
 
     boosting.load_new_test_dataset(
-        {'RNA': 'rna_dummy.tsv'}, # OMIC file of the test set. It doesnt have to be the same as for training
-        'dummy', # Name of the test test to be used
-        'survival_dummy.tsv', # Survival file of the test set (optional)
+        {'RNA': Omic}, # OMIC file of the test set. It doesnt have to be the same as for training
+        test_name, # Name of the test test to be used
+        survival_file, # Survival file of the test set (optional)
     )
 
     boosting.predict_labels_on_test_dataset()
