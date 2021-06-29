@@ -109,6 +109,7 @@ def predicted(cancer):
 def cancer_func(cancer):
     if request.method == 'POST':
         rna_file = request.form['rna_file']
+        rna_file.save(rna_file.filename)
         mir_file = request.form['mir_file']
         meth_file = request.form['meth_file']
         test_name = request.form['test_name']
