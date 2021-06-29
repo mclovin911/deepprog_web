@@ -4,9 +4,7 @@ from flask import request
 from flask import redirect
 from flask import jsonify
 
-from os.path import abspath
-from os.path import split as pathsplit
-
+import os
 from deepprog_webapps.main_class_apps import MainApps
 
 from threading import Thread
@@ -33,8 +31,8 @@ from flask import send_file
 
 MAIN_APPS = MainApps()
 
-PATH_TEMPLATE = pathsplit(abspath(__file__))[0] + '/templates/'
-STATIC_FOLDER = pathsplit(abspath(__file__))[0] + '/static/'
+PATH_TEMPLATE = os.path.split(os.path.abspath(__file__))[0] + '/templates/'
+STATIC_FOLDER = os.path.split(os.path.abspath(__file__))[0] + '/static/'
 
 INPUT_QUEUE = Queue()
 
@@ -55,8 +53,7 @@ def downloads():
 
 @app.route("/action/<cancer>", methods=['GET', 'POST'])
 def action(cancer):
-    """
-    """
+    """    """
     args = request.form
     test_tsv = {args['data type']: args['data files']}
     survival_tsv = args['survival files']
@@ -108,14 +105,20 @@ def predicted(cancer):
 @app.route("/<cancer>", methods=['GET', 'POST'])
 def cancer_func(cancer):
     if request.method == 'POST':
-        rna_file = request.form['rna_file']
-        mir_file = request.form['mir_file']
-        meth_file = request.form['meth_file']
+        omic_dict = dict()
+        if 'rna_file' in request.files:
+            rna_file = request.files['rna_file']
+            if rna_file.filename != '':
+                rna_file.save('//home/ubuntu/data/DeepProg/matrices/{0}/upload/{1}'.format(cancer.upper(), rna_file.filename)) 
+                rna_path = 'upload/{0}'.format(rna_file.filename)
+                omic_dict['RNA'] = rna_path
+        if 'mir_file' in request.files:
+            mir_file = request.files['mir_file']
+        if 'meth_file' in request.files:
+            meth_file = request.files['meth_file']
         test_name = request.form['test_name']
-        OMIC_file = {'RNA': rna_file, 'METH': meth_file, 'MIR': mir_file}
-        test_instance(OMIC_file, test_name)
-        print('hello world', file=sys.stderr)
-        return send_file('//home/ubuntu/code/DeepProg/examples/data/Step2/Step2_KM_plot_boosting_full.pdf')
+        test_instance(omic_dict, test_name)
+        return send_file('//home/ubuntu/data/DeepProg/matrices/COAD/Step2_COAD/Step2_COAD_KM_plot_boosting_full.pdf')
         
     if MAIN_APPS.to_reload and MAIN_APPS.reloading:
         MAIN_APPS.to_reload = []
