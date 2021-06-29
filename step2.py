@@ -11,8 +11,8 @@ def test_instance(Omic, test_name, survival_file):
     To obtain precomputed label files that can be used as an example, please run
     the `example_with_dummy_data.py` example script
     """
-
-    PATH_PRECOMPUTED_LABELS = '//home/ubuntu/code/DeepProg/examples/data/Step1/saved_models_classes/'
+    cancer = 'COAD'
+    PATH_PRECOMPUTED_LABELS = '//home/ubuntu/data/DeepProg/matrices/{0}/{0}/saved_models_classes'.format(cancer)
 
     if not isdir(PATH_PRECOMPUTED_LABELS):
         print('No folder: {0} found' \
@@ -20,13 +20,18 @@ def test_instance(Omic, test_name, survival_file):
                   PATH_PRECOMPUTED_LABELS, split(abspath(__file__))[0]))
         return
 
-    PATH_DATA = '//home/ubuntu/code/DeepProg/examples/data/'
+    PATH_DATA = '//home/ubuntu/data/DeepProg/matrices/{0}'.format(cancer)
 
     #Input file
-    TRAINING_TSV = {'RNA': 'rna_dummy.tsv', 'METH': 'meth_dummy.tsv'}
-    SURVIVAL_TSV = 'survival_dummy.tsv'
+    rna_file = 'rna_mapped_{0}.tsv'.format(cancer)
+    meth_file = 'meth_mapped_{0}.tsv'.format(cancer)
+    mir_file = 'mir_mapped_{0}.tsv'.format(cancer)
+    survival_file = 'surv_mapped_{0}.tsv'.format(cancer)
 
-    PROJECT_NAME = 'Step2'
+    TRAINING_TSV = {'RNA': rna_file, 'METH': meth_file, 'MIR': mir_file}
+    SURVIVAL_TSV = survival_file 
+
+    PROJECT_NAME = 'Step2_{0}'.format(cancer)
     # SEED = 3
     nb_it = 5 # Number of models to be built
     nb_threads = 2 # Number of processes to be used to fit individual survival models
@@ -63,7 +68,8 @@ def test_instance(Omic, test_name, survival_file):
     boosting.compute_pvalue_for_merged_test_fold()
 
     boosting.load_new_test_dataset(
-        {'RNA': Omic}, # OMIC file of the test set. It doesnt have to be the same as for training
+        #{'RNA': Omic}, # OMIC file of the test set. It doesnt have to be the same as for training
+        Omic,
         test_name, # Name of the test test to be used
         survival_file, # Survival file of the test set (optional)
     )

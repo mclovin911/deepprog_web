@@ -108,10 +108,12 @@ def predicted(cancer):
 @app.route("/<cancer>", methods=['GET', 'POST'])
 def cancer_func(cancer):
     if request.method == 'POST':
-        OMIC_file = request.form['OMIC']
+        rna_file = request.form['rna_file']
+        mir_file = request.form['mir_file']
+        meth_file = request.form['meth_file']
         test_name = request.form['test_name']
-        survival_file = request.form['survival_file']
-        test_instance(OMIC_file, test_name, survival_file)
+        OMIC_file = {'RNA': rna_file, 'METH': meth_file, 'MIR': mir_file}
+        test_instance(OMIC_file, test_name)
         print('hello world', file=sys.stderr)
         return send_file('//home/ubuntu/code/DeepProg/examples/data/Step2/Step2_KM_plot_boosting_full.pdf')
         
