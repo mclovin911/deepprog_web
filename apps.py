@@ -17,6 +17,7 @@ from time import sleep
 from flask import send_from_directory
 
 import step2
+import sys
 # """
 # /
 #   /action
@@ -110,7 +111,7 @@ def cancer_func(cancer):
         survival_file = request.form['survival_file']
         step2.test_instance(OMIC_file, test_name, survival_file)
         
-        
+        print('hello world', file=sys.stderr)
         
         
     if MAIN_APPS.to_reload and MAIN_APPS.reloading:
