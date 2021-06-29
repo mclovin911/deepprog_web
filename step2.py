@@ -81,5 +81,5 @@ def test_instance(Omic, test_name):
     ray.shutdown()
 
 if __name__ == '__main__':
-    test_instance('rna_dummy.tsv', 'dummy', 'survival_dummy.tsv')
+    test_instance( {'METH': '../../../../code/DeepProg/examples/data/meth_dummy.tsv'}, 'step2_test')
 
