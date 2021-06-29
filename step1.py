@@ -8,20 +8,28 @@ def test_instance():
     """
     example of SimDeepBoosting
     """
-    PATH_DATA = '{0}/../examples/data/'.format(split(abspath(__file__))[0])
+    cancer = 'COAD'
+
+    PATH_DATA = '//home/ubuntu/data/DeepProg/matrices/{0}'.format(cancer)
 
     #Input file
-    TRAINING_TSV = {'RNA': 'rna_dummy.tsv', 'METH': 'meth_dummy.tsv'}
-    SURVIVAL_TSV = 'survival_dummy.tsv'
 
-    PROJECT_NAME = 'Step1'
+    rna_file = 'rna_mapped_{0}.tsv'.format(cancer)
+    meth_file = 'meth_mapped_{0}.tsv'.format(cancer)
+    mir_file = 'mir_mapped_{0}.tsv'.format(cancer)
+    survival_file = 'surv_mapped_{0}.tsv'.format(cancer)
+
+    TRAINING_TSV = {'RNA': rna_file, 'METH': meth_file, 'MIR': mir_file}
+    SURVIVAL_TSV = survival_file
+
+    PROJECT_NAME = cancer
     EPOCHS = 10
     SEED = 3
     nb_it = 5
     nb_threads = 2
 
     # Optional metadata FILE
-    OPTIONAL_METADATA = "metadata_dummy.tsv"
+    OPTIONAL_METADATA = None
 
     # Import cluster scheduler
     import ray

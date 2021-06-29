@@ -16,8 +16,10 @@ from time import sleep
 
 from flask import send_from_directory
 
-import step2
 import sys
+from .step2 import test_instance
+from flask import send_file
+
 # """
 # /
 #   /action
@@ -109,10 +111,9 @@ def cancer_func(cancer):
         OMIC_file = request.form['OMIC']
         test_name = request.form['test_name']
         survival_file = request.form['survival_file']
-        step2.test_instance(OMIC_file, test_name, survival_file)
-        
+        test_instance(OMIC_file, test_name, survival_file)
         print('hello world', file=sys.stderr)
-        
+        return send_file('//home/ubuntu/code/DeepProg/examples/data/Step2/Step2_KM_plot_boosting_full.pdf')
         
     if MAIN_APPS.to_reload and MAIN_APPS.reloading:
         MAIN_APPS.to_reload = []

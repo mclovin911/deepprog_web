@@ -12,7 +12,7 @@ def test_instance(Omic, test_name, survival_file):
     the `example_with_dummy_data.py` example script
     """
 
-    PATH_PRECOMPUTED_LABELS = '~/code/DeepProg/examples/data/Step1/saved_models_classes'
+    PATH_PRECOMPUTED_LABELS = '//home/ubuntu/code/DeepProg/examples/data/Step1/saved_models_classes/'
 
     if not isdir(PATH_PRECOMPUTED_LABELS):
         print('No folder: {0} found' \
@@ -20,7 +20,7 @@ def test_instance(Omic, test_name, survival_file):
                   PATH_PRECOMPUTED_LABELS, split(abspath(__file__))[0]))
         return
 
-    PATH_DATA = '~/code/DeepProg/examples/data/'
+    PATH_DATA = '//home/ubuntu/code/DeepProg/examples/data/'
 
     #Input file
     TRAINING_TSV = {'RNA': 'rna_dummy.tsv', 'METH': 'meth_dummy.tsv'}
@@ -84,4 +84,5 @@ def test_instance(Omic, test_name, survival_file):
     ray.shutdown()
 
 if __name__ == '__main__':
-    test_instance()
+    test_instance('rna_dummy.tsv', 'dummy', 'survival_dummy.tsv')
+
