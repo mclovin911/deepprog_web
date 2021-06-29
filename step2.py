@@ -5,7 +5,7 @@ from os.path import isdir
 from simdeep.simdeep_boosting import SimDeepBoosting
 
 
-def test_instance(Omic, test_name, survival_file):
+def test_instance(Omic, test_name):
     """
     example of SimDeepBoosting starting from precomputed labels
     To obtain precomputed label files that can be used as an example, please run
@@ -70,23 +70,14 @@ def test_instance(Omic, test_name, survival_file):
     boosting.load_new_test_dataset(
         #{'RNA': Omic}, # OMIC file of the test set. It doesnt have to be the same as for training
         Omic,
-        test_name, # Name of the test test to be used
-        survival_file, # Survival file of the test set (optional)
+        test_name # Name of the test test to be used
     )
 
     boosting.predict_labels_on_test_dataset()
 
     # boosting.compute_c_indexes_for_test_dataset()
     # boosting.compute_clusters_consistency_for_test_labels()
-    """
-    boosting.load_new_test_dataset(
-        {'METH': 'meth_dummy.tsv'}, # OMIC file of the second test set.
-        'dummy_METH', # Name of the second test test
-        'survival_dummy.tsv', # Survival file of the test set (optional)
-    )
 
-    boosting.predict_labels_on_test_dataset()
-    """
     ray.shutdown()
 
 if __name__ == '__main__':
