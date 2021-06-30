@@ -140,26 +140,36 @@ def cancer_func(cancer):
 
 @app.route("/get_result", methods=['GET', 'POST'])                      
 def get_result():                        
-    omic_dict = dict()
-    if 'rna_file' in request.files:
-        rna_file = request.files['rna_file']
-        if rna_file.filename != '':
-            rna_file.save('//home/ubuntu/data/DeepProg/matrices/{0}/upload/{1}'.format(cancer.upper(), rna_file.filename)) 
-            omic_dict['RNA'] = 'upload/{0}'.format(rna_file.filename)
-    if 'mir_file' in request.files:
-        mir_file = request.files['mir_file']
-        if mir_file.filename != '':
-            mir_file.save('//home/ubuntu/data/DeepProg/matrices/{0}/upload/{1}'.format(cancer.upper(), mir_file.filename)) 
-            omic_dict['MIR'] = 'upload/{0}'.format(mir_file.filename)
-    if 'meth_file' in request.files:
-        meth_file = request.files['meth_file']
-        if meth_file.filename != '':
-            meth_file.save('//home/ubuntu/data/DeepProg/matrices/{0}/upload/{1}'.format(cancer.upper(), meth_file.filename)) 
-            omic_dict['METH'] = 'upload/{0}'.format(meth_file.filename)
-    test_name = request.form['test_name']
-    test_instance(omic_dict, test_name)
-    results = list(os.listdir("//home/ubuntu/data/DeepProg/matrices/{0}/Step2_COAD").format(cancer.upper()))
-    return jsonify(results=results)
+    try:
+        omic_dict = dict()
+        app.logger.warning(request.form['cancer_type'])
+        app.logger.warning(request.form)
+        app.logger.warning(request.files)
+        if 'rna_file' in request.files:
+            rna_file = request.files['rna_file']
+            if rna_file.filename != '':
+                app.logger.warning(list(os.listdir('.')))
+                rna_file.save('data/DeepProg/matrices/COAD/upload/{0}'.format(rna_file.filename)) 
+                app.logger.warning('here1')
+                omic_dict['RNA'] = 'upload/{0}'.format(rna_file.filename)
+                app.logger.warning('saved') 
+        if 'mir_file' in request.files:
+            mir_file = request.files['mir_file']
+            if mir_file.filename != '':
+                mir_file.save('//home/ubuntu/data/DeepProg/matrices/{0}/upload/{1}'.format(cancer.upper(), mir_file.filename)) 
+                omic_dict['MIR'] = 'upload/{0}'.format(mir_file.filename)
+        if 'meth_file' in request.files:
+            meth_file = request.files['meth_file']
+            if meth_file.filename != '':
+                meth_file.save('//home/ubuntu/data/DeepProg/matrices/{0}/upload/{1}'.format(cancer.upper(), meth_file.filename)) 
+                omic_dict['METH'] = 'upload/{0}'.format(meth_file.filename)
+        test_name = request.form['test_name']
+        test_instance(omic_dict, test_name)
+        results = list(os.listdir("//home/ubuntu/data/DeepProg/matrices/COAD/Step2_COAD"))
+        return jsonify(results=results)
+    except Exception as e:
+        return str(e)
+
 
 
 
