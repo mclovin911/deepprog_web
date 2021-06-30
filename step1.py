@@ -16,10 +16,10 @@ def test_instance():
 
     rna_file = 'rna_mapped_{0}.tsv'.format(cancer)
     meth_file = 'meth_mapped_{0}.tsv'.format(cancer)
-    mir_file = 'mir_mapped_{0}.tsv'.format(cancer)
-    survival_file = 'surv_mapped_{0}.tsv'.format(cancer)
+    mir_file =e = 'surv_mapped_{0}.tsv'.format(cancer)
 
-    TRAINING_TSV = {'RNA': rna_file, 'METH': meth_file, 'MIR': mir_file}
+    TRAINING_TSV = 'mir_mapped_{0}.tsv'.format(cancer)
+    survival_fil {'RNA': rna_file, 'METH': meth_file, 'MIR': mir_file}
     SURVIVAL_TSV = survival_file
 
     PROJECT_NAME = cancer

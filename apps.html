@@ -23,6 +23,8 @@
              <script src="js/html5shiv.js"></script>
              <script src="js/respond.min.js"></script>
              <![endif]-->
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   </head>
 
   <body class="homepage">
@@ -139,13 +141,20 @@
         </div><!--/.container-->
 </section><!--/#feature-->
 
+
+
+
+
+
+
+
 <div class="container">
   <div class="center wow fadeInDown">
     <section id="form"><!--/#form-->
       <br>
       <br>
   <h2><center><b>Drop your own sample!</b></center></h2>
-  <form method="POST">
+  <form method="POST" enctype="multipart/form-data">
   	<label for='rna_file'> RNA file: </label>
   	<input type='file' id='rna_file' name='rna_file'> <br><br>
     <label for='mir_file'> MIR file: </label>
@@ -154,7 +163,8 @@
     <input type='file' id='meth_file' name='meth_file'> <br><br>
   	<label for='test_name'> Test Name: </label>
   	<input type='text' id='test_name' name='test_name'> <br><br>
-    <input class="btn btn-lg btn-success" value="Submit TEST" type="submit" role="button">
+    <!-- <input class="btn btn-lg btn-success" value="Submit TEST" type="submit" role="button"> -->
+    <button id="upload-file-btn" type="button">Submit</button>
   </form>
     </section>
   </div>
@@ -302,6 +312,79 @@
 
       })}, 1000);
 </script>
+
+
+<!-- The Result -->
+<div id="results" class="result_class">
+
+  <!-- Modal content -->
+  <div class="result-content">
+    <span id='result_bye' class="close">&times;</span>
+    <p id=result_list> </p>
+  </div>
+
+</div>
+
+
+<script>
+var popup = document.getElementById("results");
+var btn = document.getElementById("see_result");
+btn.onclick = function() {
+  popup.style.display = "block";
+}
+
+var bye = document.getElementsById("result_bye");
+bye.onclick = function() {
+  popup.style.display = "none";
+}
+window.onclick = function(event) {
+  if (event.target == popup) {
+    popup.style.display = "none";
+  }
+}
+</script>
+
+
+
+<script type=text/javascript>
+  $(function() {
+    $('#upload-file-btn').click(function() {
+        var form_data = new FormData(); 
+        form.append("rna_file", $("#rna_file").prop('files'));
+        form.append("mir_file", $("#mir_file").prop('files'));
+        form.append("meth_file", $("#meth_file").prop('files'));
+        form.append("test_name", $("#test_name").val());
+        $.ajax({
+            type: 'POST',
+            url: '/get_result',
+            data: form_data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data) {
+              $("#result_list").text(data.results);
+            },
+        });
+    });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     {% for dataset in main_apps.cancer_dict[cancer].training_tsvs %}
 <script>
   $(document).ready(function(){

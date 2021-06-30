@@ -38,6 +38,7 @@ def test_instance(Omic, test_name):
 
     # Import distributed modules
     import ray
+    ray.shutdown()
     ray.init(num_cpus=3)
 
     boosting = SimDeepBoosting(

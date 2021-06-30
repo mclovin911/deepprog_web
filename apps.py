@@ -4,9 +4,7 @@ from flask import request
 from flask import redirect
 from flask import jsonify
 
-from os.path import abspath
-from os.path import split as pathsplit
-
+import os
 from deepprog_webapps.main_class_apps import MainApps
 
 from threading import Thread
@@ -19,7 +17,6 @@ from flask import send_from_directory
 import sys
 from .step2 import test_instance
 from flask import send_file
-
 # """
 # /
 #   /action
@@ -33,8 +30,8 @@ from flask import send_file
 
 MAIN_APPS = MainApps()
 
-PATH_TEMPLATE = pathsplit(abspath(__file__))[0] + '/templates/'
-STATIC_FOLDER = pathsplit(abspath(__file__))[0] + '/static/'
+PATH_TEMPLATE = os.path.split(os.path.abspath(__file__))[0] + '/templates/'
+STATIC_FOLDER = os.path.split(os.path.abspath(__file__))[0] + '/static/'
 
 INPUT_QUEUE = Queue()
 
@@ -43,6 +40,7 @@ app = Flask(__name__,
             static_url_path='',
             # template_folder=''
 )
+
 
 @app.route('/favicon.ico')
 def favicon():
@@ -55,8 +53,7 @@ def downloads():
 
 @app.route("/action/<cancer>", methods=['GET', 'POST'])
 def action(cancer):
-    """
-    """
+    """    """
     args = request.form
     test_tsv = {args['data type']: args['data files']}
     survival_tsv = args['survival files']
@@ -105,24 +102,77 @@ def predicted(cancer):
 
     return json
 
+"""
 @app.route("/<cancer>", methods=['GET', 'POST'])
 def cancer_func(cancer):
     if request.method == 'POST':
-        rna_file = request.form['rna_file']
-        rna_file.save(rna_file.filename)
-        mir_file = request.form['mir_file']
-        meth_file = request.form['meth_file']
+        omic_dict = dict()
+        if 'rna_file' in request.files:
+            rna_file = request.files['rna_file']
+            if rna_file.filename != '':
+                rna_file.save('//home/ubuntu/data/DeepProg/matrices/{0}/upload/{1}'.format(cancer.upper(), rna_file.filename)) 
+                omic_dict['RNA'] = 'upload/{0}'.format(rna_file.filename)
+        if 'mir_file' in request.files:
+            mir_file = request.files['mir_file']
+            if mir_file.filename != '':
+                mir_file.save('//home/ubuntu/data/DeepProg/matrices/{0}/upload/{1}'.format(cancer.upper(), mir_file.filename)) 
+                omic_dict['MIR'] = 'upload/{0}'.format(mir_file.filename)
+        if 'meth_file' in request.files:
+            meth_file = request.files['meth_file']
+            if meth_file.filename != '':
+                meth_file.save('//home/ubuntu/data/DeepProg/matrices/{0}/upload/{1}'.format(cancer.upper(), meth_file.filename)) 
+                omic_dict['METH'] = 'upload/{0}'.format(meth_file.filename)
         test_name = request.form['test_name']
-        OMIC_file = {'RNA': rna_file, 'METH': meth_file, 'MIR': mir_file}
-        test_instance(OMIC_file, test_name)
-        print('hello world', file=sys.stderr)
-        return send_file('//home/ubuntu/code/DeepProg/examples/data/Step2/Step2_KM_plot_boosting_full.pdf')
+        test_instance(omic_dict, test_name)
+        return send_file('//home/ubuntu/data/DeepProg/matrices/COAD/Step2_COAD/Step2_COAD_KM_plot_boosting_full.pdf')
         
     if MAIN_APPS.to_reload and MAIN_APPS.reloading:
         MAIN_APPS.to_reload = []
         MAIN_APPS.reloading = False
 
     return render_template('apps.html', main_apps=MAIN_APPS, cancer=cancer)
+"""
+
+### start test space
+@app.route("/<cancer>")
+def cancer_func():
+    return render_template('apps.html', main_apps=MAIN_APPS, cancer=cancer)
+
+@app.route("/get_result")                      
+def get_result():                        
+    try:
+        omic_dict = dict()
+        if 'rna_file' in request.files:
+            rna_file = request.files['rna_file']
+            if rna_file.filename != '':
+                rna_file.save('//home/ubuntu/data/DeepProg/matrices/{0}/upload/{1}'.format(cancer.upper(), rna_file.filename)) 
+                omic_dict['RNA'] = 'upload/{0}'.format(rna_file.filename)
+        if 'mir_file' in request.files:
+            mir_file = request.files['mir_file']
+            if mir_file.filename != '':
+                mir_file.save('//home/ubuntu/data/DeepProg/matrices/{0}/upload/{1}'.format(cancer.upper(), mir_file.filename)) 
+                omic_dict['MIR'] = 'upload/{0}'.format(mir_file.filename)
+        if 'meth_file' in request.files:
+            meth_file = request.files['meth_file']
+            if meth_file.filename != '':
+                meth_file.save('//home/ubuntu/data/DeepProg/matrices/{0}/upload/{1}'.format(cancer.upper(), meth_file.filename)) 
+                omic_dict['METH'] = 'upload/{0}'.format(meth_file.filename)
+        test_name = request.form['test_name']
+        test_instance(omic_dict, test_name)
+        results = list(os.listdir("//home/ubuntu/data/DeepProg/matrices/{0}/Step2_COAD").format(cancer.upper()))
+        return jsonify(results=results)
+    except Exception as e:
+        return str(e)
+
+
+
+
+
+### end test space
+
+
+
+
 
 @app.route("/", methods=['GET', 'POST'])
 def main(methods=['GET', 'POST']):
