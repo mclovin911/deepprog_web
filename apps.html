@@ -298,21 +298,6 @@
     <script src="js/wow.min.js"></script>
     <script src="js/main.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script>
-      setInterval(function()
-      {$.get("/predicted/{{ cancer }}", function(data) {
-      console.log(data);
-      if (data.reload_logs == true) {
-      $("#logbar").load(" #logbar");
-      };
-      $.each(data.reload, function(index, model) {
-      console.log("#" + model);
-      $("#" + model + "_raw").load(" #" + model + "_raw");
-      })
-
-      })}, 1000);
-</script>
-
 
 <!-- The Result -->
 <div id="results" class="result_class">
@@ -328,12 +313,7 @@
 
 <script>
 var popup = document.getElementById("results");
-var btn = document.getElementById("see_result");
-btn.onclick = function() {
-  popup.style.display = "block";
-}
-
-var bye = document.getElementsById("result_bye");
+var bye = document.getElementById("result_bye");
 bye.onclick = function() {
   popup.style.display = "none";
 }
@@ -350,10 +330,11 @@ window.onclick = function(event) {
   $(function() {
     $('#upload-file-btn').click(function() {
         var form_data = new FormData(); 
-        form.append("rna_file", $("#rna_file").prop('files'));
-        form.append("mir_file", $("#mir_file").prop('files'));
-        form.append("meth_file", $("#meth_file").prop('files'));
-        form.append("test_name", $("#test_name").val());
+        form_data.append("rna_file", $("#rna_file").prop('files')[0]);
+        form_data.append("mir_file", $("#mir_file").prop('files')[0]);
+        form_data.append("meth_file", $("#meth_file").prop('files')[0]);
+        form_data.append("test_name", $("#test_name").val());
+        form_data.append("cancer_type", "COAD");
         $.ajax({
             type: 'POST',
             url: '/get_result',
@@ -361,8 +342,8 @@ window.onclick = function(event) {
             contentType: false,
             cache: false,
             processData: false,
-            success: function(data) {
-              $("#result_list").text(data.results);
+            success: function(dat) {
+              $("#result_list").text(dat.results);
             },
         });
     });
