@@ -47,9 +47,9 @@ def favicon():
     return send_from_directory('{0}/{1}'.format(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-@app.route('/downloads')
-def downloads():
-    return render_template('downloads.html')
+@app.route('/downloads/<filename>')
+def downloads(filename):
+    return send_file('//home/ubuntu/data/DeepProg/matrices/COAD/Step2_COAD/'+filename,as_attachment=True)
 
 @app.route("/action/<cancer>", methods=['GET', 'POST'])
 def action(cancer):

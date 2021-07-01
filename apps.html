@@ -311,7 +311,6 @@
 
 </div>
 
-
 <script>
 var popup = document.getElementById("results");
 
@@ -348,7 +347,7 @@ window.onclick = function(event) {
             success: function(dat) {
               popup.style.display = "block";
               for(let i=0; i<dat.results.length; i++){
-                $("#result_list").append("<li>" + dat.results[i] + "</li>");
+                $("#result_list").append('<a href="/downloads/' + dat.results[i] + '" target="blank">' + dat.results[i] + '</a>');
               }
             },
         });
