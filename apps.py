@@ -42,65 +42,13 @@ app = Flask(__name__,
 )
 
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory('{0}/{1}'.format(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+@app.route('/downloads/<filename>')
+def downloads(filename):
+    return send_file('//home/ubuntu/data/DeepProg/matrices/COAD/Step2_COAD/'+filename,as_attachment=True)
 
-@app.route('/downloads')
-def downloads():
-    return render_template('downloads.html')
 
-@app.route("/action/<cancer>", methods=['GET', 'POST'])
-def action(cancer):
-    """    """
-    args = request.form
-    test_tsv = {args['data type']: args['data files']}
-    survival_tsv = args['survival files']
-    fname = args['data name']
-    MAIN_APPS.test_files[cancer] = {'test_tsv': test_tsv,
-                                    'test_survival': survival_tsv,
-                                    'fname': fname}
-    MAIN_APPS.ready_to_test[cancer] = True
 
-    MAIN_APPS.logs[cancer].append('test dataset {0} loaded!'.format(fname))
-    print('########  ########')
 
-    return redirect(cancer)
-
-@app.route("/predict/<cancer>/<model>", methods=['GET', 'POST'])
-def predict(cancer, model):
-    """
-    """
-    MAIN_APPS.predicting[cancer][model] = MAIN_APPS.test_files[cancer]['fname']
-    INPUT_QUEUE.put((cancer, model, MAIN_APPS.test_files[cancer]))
-
-    print('########  PREDICTING ########')
-    MAIN_APPS.logs[cancer].append('predicting {0} using model {1}'.format(
-        MAIN_APPS.test_files[cancer]['fname'], model))
-
-    MAIN_APPS.reload_logs = True
-
-    return jsonify({'predict':True})
-
-@app.route("/predicted/<cancer>", methods=['GET', 'POST'])
-def predicted(cancer):
-    """
-    """
-    reload_logs = MAIN_APPS.reload_logs
-
-    if MAIN_APPS.to_reload:
-        MAIN_APPS.reloading = True
-        reload_logs = True
-
-    json = jsonify({
-        'reload_logs': reload_logs,
-        'reload': MAIN_APPS.to_reload})
-
-    MAIN_APPS.reload_logs = False
-    MAIN_APPS.to_reload = []
-
-    return json
 
 """
 @app.route("/<cancer>", methods=['GET', 'POST'])
@@ -183,10 +131,11 @@ def get_result():
 
 @app.route("/", methods=['GET', 'POST'])
 def main(methods=['GET', 'POST']):
-    """
-    """
     return render_template('index.html', main_apps=MAIN_APPS)
 
+
+
+"""
 
 class DeepProgThreading(Thread):
     """
@@ -245,3 +194,5 @@ if __name__ == '__main__':
         app.run(host='0.0.0.0', port='8085')
     except KeyboardInterrupt:
         del THREADING
+
+"""
